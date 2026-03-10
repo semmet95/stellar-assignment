@@ -6,4 +6,6 @@ services:
   influxdb:
     image: influxdb:2
     ports:
-      - 8086:8086
+    - 8086:8086
+    volumes:
+    - ./config/modbus_server.json:/app/modbus_server.json:ro
