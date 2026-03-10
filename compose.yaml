@@ -1,0 +1,9 @@
+services:
+  modbus-server:
+    image: oitc/modbus-server:latest
+    ports:
+      - 5020:5020
+  influxdb:
+    image: influxdb:2
+    ports:
+      - 8086:8086
