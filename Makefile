@@ -3,6 +3,4 @@ start-containers:
 
 cleanup-containers:
 	docker compose -f compose.yaml down -v
-
-acceptance-tests: start-containers
-	sleep 10 && go run cmd/app/main.go
+	docker rmi stellar-assignment-integration-svc:latest stellar-assignment-measurement-svc:latest

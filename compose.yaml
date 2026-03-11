@@ -18,3 +18,29 @@ services:
     - ./config/modbus_server.json:/app/modbus_server.json
     depends_on:
     - influxdb
+  integration-svc:
+    build:
+      dockerfile: Dockerfile.integration
+      no_cache: true
+    ports:
+    - 8081:8080
+    restart: on-failure
+    environment:
+    - MODBUS_HOST=modbus-server
+    - MODBUS_PORT=5020
+    - INFLUX_HOST=influxdb
+    - INFLUX_PORT=8086
+    depends_on:
+      modbus-server:
+        condition: service_started
+  measurement-svc:
+    build:
+      dockerfile: Dockerfile.measurement
+      no_cache: true
+    ports:
+    - 8082:8080
+    environment:
+    - INFLUX_HOST=influxdb
+    - INFLUX_PORT=8086
+    depends_on:
+    - integration-svc
