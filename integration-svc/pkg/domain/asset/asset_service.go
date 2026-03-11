@@ -3,7 +3,7 @@ package asset
 import "context"
 
 type AssetService interface {
-	PostAssetByID(ctx context.Context, asset *Asset, ID string) error
+	PostAssetByID(ctx context.Context, asset *Asset, measurement string) error
 }
 
 type assetService struct {

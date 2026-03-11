@@ -25,7 +25,7 @@ var (
 )
 
 func main() {
-	// TODO: move config setup logic to dedicated conf package with graceful exit
+	// TODO: move config setup logic to dedicated conf package stored in the shared module
 	// initialize config
 	modbusHost, ok := os.LookupEnv("MODBUS_HOST")
 	if !ok {

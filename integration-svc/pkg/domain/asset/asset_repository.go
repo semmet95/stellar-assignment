@@ -3,10 +3,23 @@ package asset
 import (
 	"context"
 	"log"
+	"time"
 
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 	"github.com/influxdata/influxdb-client-go/v2/api"
 )
+
+// TODO: generate all the models using OAPI
+type Asset struct {
+	Name string
+	// TODO: custom types to represent a device type
+	Type string
+	ID   string
+	// TODO: custom types to represent supported protocols
+	ConnProtocol string
+	// Q: Not sure about the map value type
+	RegisterMap map[string]int16
+}
 
 type AssetRepository interface {
 	PostAssetByID(ctx context.Context, asset *Asset, measurement string) error
@@ -34,7 +47,8 @@ func (ar *assetRepository) PostAssetByID(ctx context.Context, asset *Asset, meas
 	point := influxdb2.NewPointWithMeasurement(measurement).
 		AddTag("id", asset.ID).
 		AddField("setpoint", asset.RegisterMap["setpoint"]).
-		AddField("active_power", asset.RegisterMap["active_power"])
+		AddField("active_power", asset.RegisterMap["active_power"]).
+		SetTime(time.Now())
 
 	ar.writer.WritePoint(point)
 	ar.writer.Flush()

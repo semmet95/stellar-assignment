@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option go_package = "./gen";
+
+service AssetService {
+  rpc GetAsset(GetAssetRequest) returns (AssetResponse);
+}
+
+message GetAssetRequest {
+  string id = 1;
+}
+
+
+message AssetResponse {
+  int32 activePower = 1;
+  int32 setpoint = 2;
+}

@@ -5,16 +5,10 @@ import (
 	"fmt"
 	"log"
 	"stellar-integration/pkg/domain/asset"
+	shared "stellar-shared/pkg/domain/asset"
 	"time"
 
 	"github.com/simonvetter/modbus"
-)
-
-const (
-	// Q: not sure how to make this dynamic
-	assetID        = "871689260010377213"
-	setpointKey    = "setpoint"
-	activePowerKey = "active_power"
 )
 
 type assetListener struct {
@@ -96,12 +90,12 @@ func (al *assetListener) handleRegisterValues(ctx context.Context, setpoint, act
 	payload := &asset.Asset{
 		Name:         "panel1",
 		Type:         "SOLAR_PANEL",
-		ID:           assetID,
+		ID:           shared.AssetID,
 		ConnProtocol: "TCP",
 		RegisterMap: map[string]int16{
-			setpointKey:    setpoint,
-			activePowerKey: activePower,
+			shared.SetpointKey:    setpoint,
+			shared.ActivePowerKey: activePower,
 		},
 	}
-	return al.assetSvc.PostAssetByID(ctx, payload, assetID)
+	return al.assetSvc.PostAssetByID(ctx, payload, shared.Measurement)
 }
