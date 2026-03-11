@@ -9,5 +9,5 @@ type Asset struct {
 	// TODO: custom types to represent supported protocols
 	ConnProtocol string
 	// Q: Not sure about the map value type
-	RegisterMap map[string]uint16
+	RegisterMap map[string]int16
 }

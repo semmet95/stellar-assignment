@@ -1,1 +1,4 @@
 temp/
+
+# IDE
+.vscode/

@@ -69,7 +69,7 @@ func main() {
 func initModbusClient(host, port string) error {
 	mbClient, err = modbus.NewClient(&modbus.ClientConfiguration{
 		URL:     fmt.Sprintf("tcp://%s:%s", host, port),
-		Timeout: 1 * time.Second,
+		Timeout: 500 * time.Millisecond,
 	})
 	if err != nil {
 		return fmt.Errorf("failed to initialize modbus client: %v", err)
