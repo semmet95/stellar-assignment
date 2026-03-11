@@ -1,11 +1,19 @@
 services:
+  influxdb:
+    image: influxdb:2
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: admin1234
+      DOCKER_INFLUXDB_INIT_ORG: poc
+      DOCKER_INFLUXDB_INIT_BUCKET: poc
+    ports:
+    - 8086:8086
   modbus-server:
     image: oitc/modbus-server:latest
     ports:
       - 5020:5020
-  influxdb:
-    image: influxdb:2
-    ports:
-    - 8086:8086
     volumes:
     - ./config/modbus_server.json:/app/modbus_server.json:ro
+    depends_on:
+    - influxdb
