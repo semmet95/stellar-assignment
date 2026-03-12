@@ -2,9 +2,10 @@ package main
 
 import (
 	"context"
-	"flag"
+	"fmt"
 	"log"
-	"time"
+	"net/http"
+	"os"
 
 	pb "stellar-measurement/gen"
 
@@ -14,36 +15,31 @@ import (
 )
 
 func main() {
+	// TODO: move config setup logic to dedicated conf package stored in the shared module
+	// initialize config
+	measurementHost, ok := os.LookupEnv("MEASUREMENT_HOST")
+	if !ok {
+		log.Fatal("MEASUREMENT_HOST environment variable not set")
+	}
+
+	measurementPort, ok := os.LookupEnv("MEASUREMENT_PORT")
+	if !ok {
+		log.Fatal("MEASUREMENT_PORT environment variable not set")
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
-	
-
-
-
-
-
-
-
-
-
-	flag.Parse()
-
-	conn, err := grpc.NewClient(
-		*flag.String("addr", "localhost:50051", "the address to connect to"),
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	)
+	// Point the gateway at the gRPC server
+	err := pb.RegisterAssetServiceHandlerFromEndpoint(ctx, mux, fmt.Sprintf("%s:%s", measurementHost, measurementPort), opts)
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+		log.Fatalf("failed to register gateway: %v", err)
 	}
-	defer conn.Close()
 
-	c := pb.NewAssetServiceClient(conn)
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	r, err := c.GetAsset(ctx, &pb.GetAssetRequest{Id: "871689260010377213"})
+	err = http.ListenAndServe(":8080", mux)
 	if err != nil {
-		log.Fatalf("could not get asset: %v", err)
+		log.Fatalf("failed to start gateway on port 8080 : %v", err)
 	}
-	log.Printf("active_power: %d, setpoint: %d", r.GetActivePower(), r.GetSetpoint())
 }

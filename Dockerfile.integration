@@ -3,11 +3,11 @@ FROM golang:1.26-alpine3.23 AS builder
 
 WORKDIR /app
 
-COPY integration-svc/ ./integration-svc/
-RUN cd integration-svc && go mod download
-
 COPY shared/ ./shared/
 RUN cd shared && go mod download
+
+COPY integration-svc/ ./integration-svc/
+RUN cd integration-svc && go mod download
 
 COPY . .
 RUN go build -o integration-service integration-svc/cmd/app/main.go

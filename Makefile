@@ -3,4 +3,4 @@ start-containers:
 
 cleanup-containers:
 	docker compose -f compose.yaml down -v
-	docker rmi stellar-assignment-integration-svc:latest stellar-assignment-measurement-svc:latest
+	docker rmi stellar-assignment-integration-svc:latest stellar-assignment-measurement-svc:latest stellar-assignment-api-gateway:latest

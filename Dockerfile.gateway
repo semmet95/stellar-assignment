@@ -9,16 +9,19 @@ RUN cd shared && go mod download
 COPY measurement-svc/ ./measurement-svc/
 RUN cd measurement-svc && go mod download
 
+COPY api-gateway/ ./api-gateway/
+RUN cd api-gateway && go mod download
+
 COPY . .
-RUN go build -o measurement-service measurement-svc/cmd/app/main.go
+RUN go build -o api-gw api-gateway/main.go
 
 # Stage 2: Run
 FROM alpine:3.23
 
 WORKDIR /app
 
-COPY --from=builder /app/measurement-service ./measurement-service
+COPY --from=builder /app/api-gw ./api-gw
 
 EXPOSE 8080
 
-CMD ["./measurement-service"]
+CMD ["./api-gw"]

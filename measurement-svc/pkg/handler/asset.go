@@ -20,6 +20,7 @@ func NewAssetHandler(svc asset.AssetService) *AssetHandler {
 	}
 }
 
+// TODO: need to filter error here otherwise it is added to the response
 func (ah *AssetHandler) GetAsset(ctx context.Context, req *pb.GetAssetRequest) (*pb.AssetResponse, error) {
 	assetId := req.GetId()
 	asset, err := ah.assetSvc.GetAssetByID(ctx, assetId, shared.Measurement)
