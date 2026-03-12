@@ -12,6 +12,8 @@ services:
     - 8086:8086
   modbus-server:
     image: oitc/modbus-server:latest
+    build:
+      no_cache: true
     ports:
     - 5020:5020
     volumes:
