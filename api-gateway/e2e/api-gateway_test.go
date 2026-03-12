@@ -8,6 +8,8 @@ import (
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+
+	shared "stellar-shared/pkg/domain/asset"
 )
 
 const (
@@ -18,13 +20,13 @@ var (
 	err error
 )
 
-var _ = Describe("Asset Measurements API", func() {
+var _ = Describe("API Gateway", func() {
 	Context("Testing GET endpoint", func() {
 		When("GET request is sent with valid asset ID", func() {
 			It("should return valid measurements", func() {
 				client := &http.Client{}
 				var measurement Measurement
-				url := fmt.Sprintf("%s/asset/%s/measurements", baseURL, assetID)
+				url := fmt.Sprintf("%s/asset/%s/measurements", baseURL, shared.AssetID)
 
 				req, err := http.NewRequest("GET", url, nil)
 				Expect(err).NotTo(HaveOccurred())

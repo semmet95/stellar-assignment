@@ -9,5 +9,20 @@ cleanup-containers:
 	docker compose -f compose.yaml down -v
 	docker rmi stellar-assignment-integration-svc:latest stellar-assignment-measurement-svc:latest stellar-assignment-api-gateway:latest
 
-e2e-tests: start-containers
+gateway-modbus-config:
+	cp -f api-gateway/e2e/config/modbus_server.json config/modbus_server.json
+
+gateway-e2e-tests: gateway-modbus-config start-containers
 	sleep 10 && go run github.com/onsi/ginkgo/v2/ginkgo run api-gateway/e2e/...
+
+measurement-modbus-config:
+	cp -f measurement-svc/e2e/config/modbus_server.json config/modbus_server.json
+
+measurement-e2e-tests: measurement-modbus-config start-containers
+	sleep 10 && go run github.com/onsi/ginkgo/v2/ginkgo run measurement-svc/e2e/...
+
+integration-modbus-config:
+	cp -f integration-svc/e2e/config/modbus_server.json config/modbus_server.json
+
+integration-e2e-tests: integration-modbus-config start-containers
+	sleep 10 && go run github.com/onsi/ginkgo/v2/ginkgo run integration-svc/e2e/...
