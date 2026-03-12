@@ -21,6 +21,7 @@ type Asset struct {
 	RegisterMap map[string]int16
 }
 
+//go:generate go tool counterfeiter . AssetRepository
 type AssetRepository interface {
 	PostAssetByID(ctx context.Context, asset *Asset, measurement string) error
 }

@@ -16,6 +16,7 @@ type Asset struct {
 	ActivePower int64
 }
 
+//go:generate go tool counterfeiter . AssetRepository
 type AssetRepository interface {
 	GetAssetByID(context.Context, string, string) (*Asset, error)
 }

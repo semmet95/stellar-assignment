@@ -1,3 +1,7 @@
+codegen:
+	cd integration-svc && go generate ./...
+	cd measurement-svc && go generate ./...
+
 start-containers:
 	docker compose -f compose.yaml up -d
 
