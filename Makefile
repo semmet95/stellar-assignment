@@ -5,6 +5,10 @@ codegen:
 start-containers:
 	docker compose -f compose.yaml up -d
 
+unit-tests:
+	cd integration-svc && go run github.com/onsi/ginkgo/v2/ginkgo run --skip-package=e2e ./... && cd -
+	cd measurement-svc && go run github.com/onsi/ginkgo/v2/ginkgo run --skip-package=e2e ./... && cd -
+
 cleanup-containers:
 	docker compose -f compose.yaml down -v
 	docker rmi stellar-assignment-integration-svc:latest stellar-assignment-measurement-svc:latest stellar-assignment-api-gateway:latest
