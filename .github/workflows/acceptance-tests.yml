@@ -13,4 +13,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Run acceptance tests
-      run: make integration-e2e-tests cleanup-containers measurement-e2e-tests cleanup-containers gateway-e2e-tests
+      shell: bash
+      run: |
+        set -ex
+        make integration-e2e-tests cleanup-containers
+        sleep 10
+        make measurement-e2e-tests cleanup-containers
+        sleep 10
+        make gateway-e2e-tests
