@@ -1,9 +1,14 @@
 syntax = "proto3";
-
 option go_package = "./gen";
 
+import "google/api/annotations.proto";
+
 service AssetService {
-  rpc GetAsset(GetAssetRequest) returns (AssetResponse);
+  rpc GetAsset(GetAssetRequest) returns (AssetResponse) {
+    option (google.api.http) = {
+      get: "/asset/{id}/measurements"   // HTTP GET maps to this RPC
+    };
+  }
 }
 
 message GetAssetRequest {

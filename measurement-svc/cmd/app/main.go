@@ -18,6 +18,7 @@ var (
 	err      error
 )
 
+// TODO: need to find a way to generate protobufs dynamically and share proto files
 func main() {
 
 	influxHost, ok := os.LookupEnv("INFLUX_HOST")

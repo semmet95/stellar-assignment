@@ -2,11 +2,12 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v6.30.2
-// source: proto/asset.proto
+// source: asset.proto
 
 package gen
 
 import (
+	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -30,7 +31,7 @@ type GetAssetRequest struct {
 
 func (x *GetAssetRequest) Reset() {
 	*x = GetAssetRequest{}
-	mi := &file_proto_asset_proto_msgTypes[0]
+	mi := &file_asset_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +43,7 @@ func (x *GetAssetRequest) String() string {
 func (*GetAssetRequest) ProtoMessage() {}
 
 func (x *GetAssetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_asset_proto_msgTypes[0]
+	mi := &file_asset_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +56,7 @@ func (x *GetAssetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAssetRequest.ProtoReflect.Descriptor instead.
 func (*GetAssetRequest) Descriptor() ([]byte, []int) {
-	return file_proto_asset_proto_rawDescGZIP(), []int{0}
+	return file_asset_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *GetAssetRequest) GetId() string {
@@ -75,7 +76,7 @@ type AssetResponse struct {
 
 func (x *AssetResponse) Reset() {
 	*x = AssetResponse{}
-	mi := &file_proto_asset_proto_msgTypes[1]
+	mi := &file_asset_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -87,7 +88,7 @@ func (x *AssetResponse) String() string {
 func (*AssetResponse) ProtoMessage() {}
 
 func (x *AssetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_asset_proto_msgTypes[1]
+	mi := &file_asset_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -100,7 +101,7 @@ func (x *AssetResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AssetResponse.ProtoReflect.Descriptor instead.
 func (*AssetResponse) Descriptor() ([]byte, []int) {
-	return file_proto_asset_proto_rawDescGZIP(), []int{1}
+	return file_asset_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *AssetResponse) GetActivePower() int64 {
@@ -117,37 +118,37 @@ func (x *AssetResponse) GetSetpoint() int64 {
 	return 0
 }
 
-var File_proto_asset_proto protoreflect.FileDescriptor
+var File_asset_proto protoreflect.FileDescriptor
 
-const file_proto_asset_proto_rawDesc = "" +
+const file_asset_proto_rawDesc = "" +
 	"\n" +
-	"\x11proto/asset.proto\"!\n" +
+	"\vasset.proto\x1a\x1cgoogle/api/annotations.proto\"!\n" +
 	"\x0fGetAssetRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"M\n" +
 	"\rAssetResponse\x12 \n" +
 	"\vactivePower\x18\x01 \x01(\x03R\vactivePower\x12\x1a\n" +
-	"\bsetpoint\x18\x02 \x01(\x03R\bsetpoint2<\n" +
-	"\fAssetService\x12,\n" +
-	"\bGetAsset\x12\x10.GetAssetRequest\x1a\x0e.AssetResponseB\aZ\x05./genb\x06proto3"
+	"\bsetpoint\x18\x02 \x01(\x03R\bsetpoint2^\n" +
+	"\fAssetService\x12N\n" +
+	"\bGetAsset\x12\x10.GetAssetRequest\x1a\x0e.AssetResponse\" \x82\xd3\xe4\x93\x02\x1a\x12\x18/asset/{id}/measurementsB\aZ\x05./genb\x06proto3"
 
 var (
-	file_proto_asset_proto_rawDescOnce sync.Once
-	file_proto_asset_proto_rawDescData []byte
+	file_asset_proto_rawDescOnce sync.Once
+	file_asset_proto_rawDescData []byte
 )
 
-func file_proto_asset_proto_rawDescGZIP() []byte {
-	file_proto_asset_proto_rawDescOnce.Do(func() {
-		file_proto_asset_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_proto_asset_proto_rawDesc), len(file_proto_asset_proto_rawDesc)))
+func file_asset_proto_rawDescGZIP() []byte {
+	file_asset_proto_rawDescOnce.Do(func() {
+		file_asset_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_asset_proto_rawDesc), len(file_asset_proto_rawDesc)))
 	})
-	return file_proto_asset_proto_rawDescData
+	return file_asset_proto_rawDescData
 }
 
-var file_proto_asset_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_proto_asset_proto_goTypes = []any{
+var file_asset_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_asset_proto_goTypes = []any{
 	(*GetAssetRequest)(nil), // 0: GetAssetRequest
 	(*AssetResponse)(nil),   // 1: AssetResponse
 }
-var file_proto_asset_proto_depIdxs = []int32{
+var file_asset_proto_depIdxs = []int32{
 	0, // 0: AssetService.GetAsset:input_type -> GetAssetRequest
 	1, // 1: AssetService.GetAsset:output_type -> AssetResponse
 	1, // [1:2] is the sub-list for method output_type
@@ -157,26 +158,26 @@ var file_proto_asset_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_proto_asset_proto_init() }
-func file_proto_asset_proto_init() {
-	if File_proto_asset_proto != nil {
+func init() { file_asset_proto_init() }
+func file_asset_proto_init() {
+	if File_asset_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_asset_proto_rawDesc), len(file_proto_asset_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_asset_proto_rawDesc), len(file_asset_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_proto_asset_proto_goTypes,
-		DependencyIndexes: file_proto_asset_proto_depIdxs,
-		MessageInfos:      file_proto_asset_proto_msgTypes,
+		GoTypes:           file_asset_proto_goTypes,
+		DependencyIndexes: file_asset_proto_depIdxs,
+		MessageInfos:      file_asset_proto_msgTypes,
 	}.Build()
-	File_proto_asset_proto = out.File
-	file_proto_asset_proto_goTypes = nil
-	file_proto_asset_proto_depIdxs = nil
+	File_asset_proto = out.File
+	file_asset_proto_goTypes = nil
+	file_asset_proto_depIdxs = nil
 }
