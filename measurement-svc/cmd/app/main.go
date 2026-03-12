@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net"
@@ -11,6 +12,7 @@ import (
 
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 )
 
 var (
@@ -38,7 +40,7 @@ func main() {
 	assetSvc := asset.NewAssetService(assetRepo)
 	assetHandler := handler.NewAssetHandler(assetSvc)
 
-	server := grpc.NewServer()
+	server := grpc.NewServer(grpc.UnaryInterceptor(clientIDInterceptor))
 	pb.RegisterAssetServiceServer(server, assetHandler)
 
 	lis, err := net.Listen("tcp", ":50051")
@@ -49,4 +51,23 @@ func main() {
 	if err := server.Serve(lis); err != nil {
 		log.Fatalf("failed to start grps server: %v", err)
 	}
+}
+
+func clientIDInterceptor(
+	ctx context.Context,
+	req interface{},
+	info *grpc.UnaryServerInfo,
+	handler grpc.UnaryHandler,
+) (interface{}, error) {
+	clientID := "unknown"
+
+	if md, ok := metadata.FromIncomingContext(ctx); ok {
+		if values := md.Get("x-client-id"); len(values) > 0 {
+			clientID = values[0]
+		}
+	}
+
+	ctx = context.WithValue(ctx, "client_id", clientID)
+
+	return handler(ctx, req)
 }

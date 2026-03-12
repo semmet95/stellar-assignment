@@ -29,7 +29,6 @@ var _ = Describe("Asset Measurements API", func() {
 				req, err := http.NewRequest("GET", url, nil)
 				Expect(err).NotTo(HaveOccurred())
 
-				req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml,application/json")
 				resp, err := client.Do(req)
 				Expect(err).NotTo(HaveOccurred())
 				defer resp.Body.Close()
@@ -46,6 +45,5 @@ var _ = Describe("Asset Measurements API", func() {
 	})
 
 	// TODO: add test for invalid asset ID after integration svc sends 404
-	// TODO: add test to verify 5m caching
 	// TODO: add test to verify the following flow: modbus register update -> cachd get response -> wait 5 mins -> updated get response
 })

@@ -42,6 +42,7 @@ services:
     environment:
     - INFLUX_HOST=influxdb
     - INFLUX_PORT=8086
+    - CACHE_DURATION_MINS=5
     depends_on:
       integration-svc:
         condition: service_started
