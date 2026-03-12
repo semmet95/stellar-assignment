@@ -67,8 +67,8 @@ func (x *GetAssetRequest) GetId() string {
 
 type AssetResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	ActivePower   int32                  `protobuf:"varint,1,opt,name=activePower,proto3" json:"activePower,omitempty"`
-	Setpoint      int32                  `protobuf:"varint,2,opt,name=setpoint,proto3" json:"setpoint,omitempty"`
+	ActivePower   int64                  `protobuf:"varint,1,opt,name=activePower,proto3" json:"activePower,omitempty"`
+	Setpoint      int64                  `protobuf:"varint,2,opt,name=setpoint,proto3" json:"setpoint,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -103,14 +103,14 @@ func (*AssetResponse) Descriptor() ([]byte, []int) {
 	return file_proto_asset_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *AssetResponse) GetActivePower() int32 {
+func (x *AssetResponse) GetActivePower() int64 {
 	if x != nil {
 		return x.ActivePower
 	}
 	return 0
 }
 
-func (x *AssetResponse) GetSetpoint() int32 {
+func (x *AssetResponse) GetSetpoint() int64 {
 	if x != nil {
 		return x.Setpoint
 	}
@@ -125,8 +125,8 @@ const file_proto_asset_proto_rawDesc = "" +
 	"\x0fGetAssetRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"M\n" +
 	"\rAssetResponse\x12 \n" +
-	"\vactivePower\x18\x01 \x01(\x05R\vactivePower\x12\x1a\n" +
-	"\bsetpoint\x18\x02 \x01(\x05R\bsetpoint2<\n" +
+	"\vactivePower\x18\x01 \x01(\x03R\vactivePower\x12\x1a\n" +
+	"\bsetpoint\x18\x02 \x01(\x03R\bsetpoint2<\n" +
 	"\fAssetService\x12,\n" +
 	"\bGetAsset\x12\x10.GetAssetRequest\x1a\x0e.AssetResponseB\aZ\x05./genb\x06proto3"
 

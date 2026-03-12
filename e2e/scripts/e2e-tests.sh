@@ -4,6 +4,6 @@ set -ex
 cleanup() {
     make cleanup-containers
 }
-# trap cleanup EXIT ERR SIGINT SIGTERM
+trap cleanup ERR SIGINT SIGTERM
 
 make start-containers

@@ -12,8 +12,8 @@ import (
 // TODO: generate all the models using OAPI
 type Asset struct {
 	ID          string
-	Setpoint    int16
-	ActivePower int16
+	Setpoint    int64
+	ActivePower int64
 }
 
 type AssetRepository interface {
@@ -37,7 +37,8 @@ func (ar *assetRepository) GetAssetByID(ctx context.Context, assetId, measuremen
     |> range(start: -1s)
     |> filter(fn: (r) => r._measurement == "%s")
 	|> filter(fn: (r) => r.id == "%s")
-    |> last()`, measurement, assetId)
+	|> pivot(rowKey: ["_time"], columnKey: ["_field"], valueColumn: "_value")
+    |> last(column: "_time")`, measurement, assetId)
 
 	result, err := ar.queryAPI.Query(ctx, query)
 	if err == nil {
@@ -45,14 +46,17 @@ func (ar *assetRepository) GetAssetByID(ctx context.Context, assetId, measuremen
 			return nil, fmt.Errorf("flux query error for asset id %s: %s", assetId, result.Err().Error())
 		}
 
-		activePower, ok := result.Record().ValueByKey(asset.ActivePowerKey).(int16)
+		result.Next() // get the single matched record
+		record := result.Record()
+
+		activePower, ok := record.ValueByKey(asset.ActivePowerKey).(int64) // Q: looks like influx only return int64?
 		if !ok {
-			return nil, fmt.Errorf("failed to cast active_power type: %v", activePower)
+			return nil, fmt.Errorf("invalid active_power value: %v", activePower)
 		}
 
-		setpoint, ok := result.Record().ValueByKey(asset.SetpointKey).(int16)
+		setpoint, ok := record.ValueByKey(asset.SetpointKey).(int64)
 		if !ok {
-			return nil, fmt.Errorf("failed to cast setpoint type: %v", setpoint)
+			return nil, fmt.Errorf("invalid setpoint value: %v", setpoint)
 		}
 
 		return &Asset{

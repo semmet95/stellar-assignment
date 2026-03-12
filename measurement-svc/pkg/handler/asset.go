@@ -28,7 +28,7 @@ func (ah *AssetHandler) GetAsset(ctx context.Context, req *pb.GetAssetRequest) (
 	}
 
 	return &pb.AssetResponse{
-		ActivePower: int32(asset.ActivePower),
-		Setpoint:    int32(asset.Setpoint),
+		ActivePower: asset.ActivePower,
+		Setpoint:    asset.Setpoint,
 	}, nil
 }

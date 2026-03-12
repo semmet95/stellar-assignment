@@ -12,6 +12,6 @@ message GetAssetRequest {
 
 
 message AssetResponse {
-  int32 activePower = 1;
-  int32 setpoint = 2;
+  int64 activePower = 1;
+  int64 setpoint = 2;
 }

@@ -22,8 +22,6 @@ services:
     build:
       dockerfile: Dockerfile.integration
       no_cache: true
-    ports:
-    - 8081:8080
     restart: on-failure
     environment:
     - MODBUS_HOST=modbus-server
@@ -38,9 +36,10 @@ services:
       dockerfile: Dockerfile.measurement
       no_cache: true
     ports:
-    - 8082:8080
+    - 50051:50051
     environment:
     - INFLUX_HOST=influxdb
     - INFLUX_PORT=8086
     depends_on:
-    - integration-svc
+      integration-svc:
+        condition: service_started
