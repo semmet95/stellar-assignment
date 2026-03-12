@@ -45,5 +45,5 @@ var _ = Describe("Asset Measurements API", func() {
 	})
 
 	// TODO: add test for invalid asset ID after integration svc sends 404
-	// TODO: add test to verify the following flow: modbus register update -> cachd get response -> wait 5 mins -> updated get response
+	// TODO: add test to verify the following flow: modbus register update -> cached get response -> wait 5 mins -> updated get response
 })

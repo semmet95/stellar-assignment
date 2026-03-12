@@ -97,5 +97,10 @@ func (al *assetListener) handleRegisterValues(ctx context.Context, setpoint, act
 			shared.ActivePowerKey: activePower,
 		},
 	}
-	return al.assetSvc.PostAssetByID(ctx, payload, shared.Measurement)
+	if err := al.assetSvc.PostAssetByID(ctx, payload, shared.Measurement); err != nil {
+		log.Printf("failed to post measurements to service for asset %s: %v\n", payload.ID, err)
+		return err
+	}
+	log.Printf("posted measurement for asset %s (active_power=%d setpoint=%d)\n", payload.ID, activePower, setpoint)
+	return nil
 }

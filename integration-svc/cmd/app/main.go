@@ -47,11 +47,13 @@ func main() {
 		log.Fatal("MODBUS_PORT environment variable not set")
 	}
 
+	log.Printf("connecting to Modbus at %s:%s\n", modbusHost, modbusPort)
 	if err := initModbusClient(modbusHost, modbusPort); err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to initialize modbus client at %s:%s: %v", modbusHost, modbusPort, err)
 	}
 	defer mbClient.Close()
 
+	log.Printf("connecting to InfluxDB at %s:%s\n", influxHost, influxPort)
 	dbClient = influxdb2.NewClient(fmt.Sprintf("http://%s:%s", influxHost, influxPort), "poc")
 	defer dbClient.Close()
 
@@ -59,11 +61,14 @@ func main() {
 	assetSvc := asset.NewAssetService(assetRepo)
 
 	// start the listener
-	listener.NewAssetListener(
+	log.Println("starting modbus listener")
+	if err := listener.NewAssetListener(
 		mbClient,
 		1*time.Second,
 		assetSvc,
-	).StartListening(context.Background(), unitID) // could start this in a goroutine if a server needs to run
+	).StartListening(context.Background(), unitID); err != nil {
+		log.Fatalf("modbus listener failed to start with error: %v", err)
+	}
 }
 
 func initModbusClient(host, port string) error {

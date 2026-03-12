@@ -27,19 +27,33 @@ func main() {
 		log.Fatal("MEASUREMENT_PORT environment variable not set")
 	}
 
+	log.Printf("starting api gateway; forwarding to measurement service at %s:%s\n", measurementHost, measurementPort)
+
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	mux := runtime.NewServeMux()
+	mux := runtime.NewServeMux(
+		runtime.WithIncomingHeaderMatcher(headerMatcher),
+	)
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	// Point the gateway at the gRPC server
 	err := pb.RegisterAssetServiceHandlerFromEndpoint(ctx, mux, fmt.Sprintf("%s:%s", measurementHost, measurementPort), opts)
 	if err != nil {
-		log.Fatalf("failed to register gateway: %v", err)
+		log.Fatalf("failed to register gateway to %s:%s: %v", measurementHost, measurementPort, err)
 	}
+	log.Println("gateway registered; starting HTTP server on :8080")
 
 	err = http.ListenAndServe(":8080", mux)
 	if err != nil {
-		log.Fatalf("failed to start gateway on port 8080 : %v", err)
+		log.Fatalf("api gateway stopped unexpectedly: %v", err)
+	}
+}
+
+func headerMatcher(key string) (string, bool) {
+	switch key {
+	case "X-Client-Id":
+		return key, true
+	default:
+		return runtime.DefaultHeaderMatcher(key)
 	}
 }

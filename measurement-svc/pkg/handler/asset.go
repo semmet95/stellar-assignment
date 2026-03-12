@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	pb "stellar-measurement/gen"
@@ -28,6 +29,7 @@ func (ah *AssetHandler) GetAsset(ctx context.Context, req *pb.GetAssetRequest) (
 	clientId := ctx.Value("client_id").(string)
 	cachedMeasurement := cache.GetCachedMeasurement(clientId)
 	if cachedMeasurement != nil {
+		log.Printf("cache hit for client %s\n", clientId)
 		return &pb.AssetResponse{
 			ActivePower: cachedMeasurement.ActivePower,
 			Setpoint:    cachedMeasurement.Setpoint,
@@ -35,9 +37,10 @@ func (ah *AssetHandler) GetAsset(ctx context.Context, req *pb.GetAssetRequest) (
 	}
 
 	assetId := req.GetId()
+	log.Printf("getting measurements for asset with id %s\n", assetId)
 	asset, err := ah.assetSvc.GetAssetByID(ctx, assetId, shared.Measurement)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get measurements for assed with id %s: %v", assetId, err)
+		return nil, fmt.Errorf("failed to get measurements for asset with id %s: %v", assetId, err)
 	}
 
 	// cache the response

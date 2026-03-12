@@ -1,7 +1,7 @@
 package cache
 
 import (
-	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"time"
@@ -29,12 +29,13 @@ func init() {
 	} else {
 		duration, err := strconv.Atoi(cd)
 		if err != nil {
-			fmt.Printf("failed to parse cache duration with error: %v\nswitching to default %d minutes\n", err, defaultCacheDuration)
+			log.Printf("failed to parse cache duration: %v; switching to default %d minutes\n", err, defaultCacheDuration)
 			cacheDuration = time.Duration(defaultCacheDuration) * time.Minute
 		} else {
 			cacheDuration = time.Duration(duration) * time.Minute
 		}
 	}
+	cachedMeasurements = make(map[string]Measurement)
 }
 
 func UpdateCache(clientID string, measurement *Measurement) {

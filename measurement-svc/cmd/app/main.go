@@ -25,14 +25,15 @@ func main() {
 
 	influxHost, ok := os.LookupEnv("INFLUX_HOST")
 	if !ok {
-		log.Fatal("MODBUS_HOST environment variable not set")
+		log.Fatal("INFLUX_HOST environment variable not set")
 	}
 
 	influxPort, ok := os.LookupEnv("INFLUX_PORT")
 	if !ok {
-		log.Fatal("MODBUS_PORT environment variable not set")
+		log.Fatal("INFLUX_PORT environment variable not set")
 	}
 
+	log.Printf("connecting to InfluxDB at %s:%s\n", influxHost, influxPort)
 	dbClient = influxdb2.NewClient(fmt.Sprintf("http://%s:%s", influxHost, influxPort), "poc")
 	defer dbClient.Close()
 
@@ -45,11 +46,12 @@ func main() {
 
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
-		log.Fatalf("failed to start tcp listener: %v", err)
+		log.Fatalf("failed to start tcp listener on :50051: %v", err)
 	}
 
+	log.Println("measurement service listening on :50051")
 	if err := server.Serve(lis); err != nil {
-		log.Fatalf("failed to start grps server: %v", err)
+		log.Fatalf("measurement service stopped unexpectedly: %v", err)
 	}
 }
 

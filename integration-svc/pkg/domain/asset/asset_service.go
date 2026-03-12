@@ -17,7 +17,5 @@ func NewAssetService(assetRepo AssetRepository) AssetService {
 }
 
 func (as *assetService) PostAssetByID(ctx context.Context, asset *Asset, measurement string) error {
-	as.assetRepo.PostAssetByID(ctx, asset, measurement)
-
-	return nil
+	return as.assetRepo.PostAssetByID(ctx, asset, measurement)
 }
