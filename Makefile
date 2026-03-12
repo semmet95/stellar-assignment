@@ -4,6 +4,7 @@ codegen:
 
 start-containers:
 	docker compose -f compose.yaml up -d
+	sleep 20
 
 unit-tests:
 	cd integration-svc && go run github.com/onsi/ginkgo/v2/ginkgo run --skip-package=e2e ./... && cd -
