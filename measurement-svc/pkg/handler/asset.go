@@ -23,7 +23,6 @@ func NewAssetHandler(svc asset.AssetService) *AssetHandler {
 	}
 }
 
-// TODO: need to filter error here otherwise it is added to the response
 // GetAsset serves asset requests using cache then service.
 func (ah *AssetHandler) GetAsset(ctx context.Context, req *pb.GetAssetRequest) (*pb.AssetResponse, error) {
 	// check cache before connecting to DB

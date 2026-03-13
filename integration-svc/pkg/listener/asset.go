@@ -12,7 +12,6 @@ import (
 )
 
 type assetListener struct {
-	// TODO: add reference to asset svc
 	modBusClient *modbus.ModbusClient
 	pollInterval time.Duration
 	assetSvc     asset.AssetService

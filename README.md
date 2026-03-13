@@ -25,7 +25,7 @@ Small Go microservice suite that polls Modbus devices, writes/reads measurements
 Set these in your shell or in your container runtime before running services locally.
 
 ## Testing
-- Unit tests: `go test ./...`. The project uses Ginkgo/Gomega for BDD-style tests in `*/pkg/...`.
+- Unit tests: `make unit-tests`. The project uses Ginkgo/Gomega for BDD-style tests in `*/pkg/...`.
 - Fakes: generated fakes (via `counterfeiter`) live next to domain packages (e.g., `*/pkg/domain/asset/assetfakes`) and are used in unit tests.
 - End-to-end: E2E suites are added for each service in the `e2e` folder. Each e2e suite has its own copy of Modbus server configuration, this way each suite tests against its own set of measurements.  
 Run the e2e suites using the following make targets.
