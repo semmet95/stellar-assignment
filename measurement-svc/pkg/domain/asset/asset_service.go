@@ -10,12 +10,14 @@ type assetService struct {
 	assetRepo AssetRepository
 }
 
+// NewAssetService creates an AssetService.
 func NewAssetService(assetRepo AssetRepository) AssetService {
 	return &assetService{
 		assetRepo: assetRepo,
 	}
 }
 
+// GetAssetByID returns latest asset measurement.
 func (as *assetService) GetAssetByID(ctx context.Context, assetId, measurement string) (*Asset, error) {
 	return as.assetRepo.GetAssetByID(ctx, assetId, measurement)
 }

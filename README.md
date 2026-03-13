@@ -1,7 +1,7 @@
 # Stellar Assignment
 
 ## Project overview
-Small Go microservice suite that polls Modbus devices, writes/reads measurements in InfluxDB, and exposes measurements over an HTTP/gRPC gateway.
+Small Go microservice suite that polls Modbus devices, writes/reads measurements in InfluxDB, exposes measurements over a gRPC gateway, and shares them via an HTTP → gRPC API gateway.
 
 ## Modules
 - **api-gateway:** [api-gateway](api-gateway) — HTTP → gRPC gateway (grpc-gateway) that forwards REST calls to the measurement gRPC service.
@@ -27,15 +27,31 @@ Set these in your shell or in your container runtime before running services loc
 ## Testing
 - Unit tests: `go test ./...`. The project uses Ginkgo/Gomega for BDD-style tests in `*/pkg/...`.
 - Fakes: generated fakes (via `counterfeiter`) live next to domain packages (e.g., `*/pkg/domain/asset/assetfakes`) and are used in unit tests.
-- End-to-end: E2E suites are under [api-gateway/e2e](api-gateway/e2e). Run `make e2e-tests` to start containers and execute the e2e suites.
-- Suggested GitHub workflows (CI):
-  - `unit` job: `go test ./...`, `go vet`/linters, build binaries.
-  - `e2e` job (optional/separate): build Docker images and run `make e2e-tests` against a composed environment.
+- End-to-end: E2E suites are added for each service in the `e2e` folder. Each e2e suite has its own copy of Modbus server configuration, this way each suite tests against its own set of measurements.  
+Run the e2e suites using the following make targets.
+```
+make integration-e2e-tests cleanup-containers
+sleep 10
+make measurement-e2e-tests cleanup-containers
+sleep 10
+make gateway-e2e-tests
+```
 
 ## Local setup & deployment
 Prerequisites: `go 1.26.x`, `docker`, `docker compose`, `make`.
 
-Quick full-stack (compose):
+Quick full-stack (compose):  
+Compose file has default environment variable value set for each container. These values can be overridden as follows.
+```
+export INFLUX_HOST=localhost
+export INFLUX_PORT=8086
+export MODBUS_HOST=localhost
+export MODBUS_PORT=5020
+export MEASUREMENT_HOST=localhost
+export MEASUREMENT_PORT=50051
+export CACHE_DURATION_MINS=10
+```
+Run the following command to start all the services with the set configuration.
 ```bash
 make start-containers
 ```
@@ -45,18 +61,6 @@ Stop and clean:
 ```bash
 make cleanup-containers
 ```
-
-Run services locally (development):
-- Start InfluxDB and Modbus server via compose or external services.
-- Export env vars (example):
-```bash
-export INFLUX_HOST=localhost
-export INFLUX_PORT=8086
-export MODBUS_HOST=localhost
-export MODBUS_PORT=5020
-export MEASUREMENT_HOST=localhost
-export MEASUREMENT_PORT=50051
-```
 - Run services from source:
 ```bash
 go run ./integration-svc/cmd/app
@@ -64,20 +68,6 @@ go run ./measurement-svc/cmd/app
 go run ./api-gateway
 ```
 
-Run tests:
-- Unit tests:
-```bash
-go test ./...
-```
-- E2E (starts containers then runs suites):
-```bash
-make e2e-tests
-```
-
-## Notes & tips
-- Logging: services use the standard `log` package for concise startup, connection and error context logs.
-- Regenerating fakes: use `counterfeiter` (referenced in module tooling) to update fakes.
-- CI: keep unit and e2e separate (e2e usually runs in a dedicated job with service containers).
-
----
-Concise README created to help new contributors run and test the project locally. If you want, I can also add a GitHub Actions workflow example or expand any section further.
+## CI Workflows
+- [Unit Tests](.github/workflows/unit-tests.yml): Runs all the unit tests when a PR to the `main` branch is created or when the `main` branch is updated.
+- [E2E Tests](.github/workflows/e2e-tests.yml): Runs e2e test suites in all the services when a PR to the `main` branch is created or when the `main` branch is updated.

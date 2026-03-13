@@ -24,6 +24,7 @@ var (
 	err      error
 )
 
+// main starts the integration service and listener.
 func main() {
 	// TODO: move config setup logic to dedicated conf package stored in the shared module
 	// initialize config
@@ -71,6 +72,7 @@ func main() {
 	}
 }
 
+// initModbusClient creates and opens a Modbus client.
 func initModbusClient(host, port string) error {
 	mbClient, err = modbus.NewClient(&modbus.ClientConfiguration{
 		URL:     fmt.Sprintf("tcp://%s:%s", host, port),

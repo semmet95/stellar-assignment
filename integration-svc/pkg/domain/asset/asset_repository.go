@@ -31,6 +31,7 @@ type assetRepository struct {
 }
 
 // TODO: create a generic interface for the DB client
+// NewAssetRepository creates a repository and logs writer errors.
 func NewAssetRepository(writer api.WriteAPI) AssetRepository {
 	// Q: not sure about the best practice here
 	go func() {
@@ -44,6 +45,7 @@ func NewAssetRepository(writer api.WriteAPI) AssetRepository {
 	}
 }
 
+// PostAssetByID writes a measurement point.
 func (ar *assetRepository) PostAssetByID(ctx context.Context, asset *Asset, measurement string) error {
 	point := influxdb2.NewPointWithMeasurement(measurement).
 		AddTag("id", asset.ID).

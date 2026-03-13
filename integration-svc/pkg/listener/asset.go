@@ -22,6 +22,7 @@ type AssetListener interface {
 	StartListening(ctx context.Context, unitID uint8) error
 }
 
+// NewAssetListener constructs a listener.
 func NewAssetListener(mbClient *modbus.ModbusClient, pollInterval time.Duration, assetSvc asset.AssetService) AssetListener {
 	return &assetListener{
 		modBusClient: mbClient,
@@ -30,6 +31,7 @@ func NewAssetListener(mbClient *modbus.ModbusClient, pollInterval time.Duration,
 	}
 }
 
+// StartListening opens the connection and polls.
 func (al *assetListener) StartListening(ctx context.Context, unitID uint8) error {
 	// Q: How is this related to the asset ID?
 	al.modBusClient.SetUnitId(unitID)
@@ -52,7 +54,7 @@ func (al *assetListener) StartListening(ctx context.Context, unitID uint8) error
 	}
 }
 
-// Q: not sure why ReadRegister is returning 1 for both the measurements
+// poll reads registers and forwards values.
 func (al *assetListener) poll(ctx context.Context) {
 	// TODO: store register entries in a map and iterate over it
 	// TODO: add logging with different levels
@@ -86,6 +88,7 @@ func (al *assetListener) poll(ctx context.Context) {
 	al.handleRegisterValues(ctx, signedSetpoint, signedactivePower)
 }
 
+// handleRegisterValues builds payload and posts it.
 func (al *assetListener) handleRegisterValues(ctx context.Context, setpoint, activePower int16) error {
 	payload := &asset.Asset{
 		Name:         "panel1",

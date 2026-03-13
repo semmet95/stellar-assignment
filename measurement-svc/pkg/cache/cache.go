@@ -22,6 +22,7 @@ type Measurement struct {
 	Setpoint    int64
 }
 
+// init sets cache duration and initializes the cache map.
 func init() {
 	cd, ok := os.LookupEnv("CACHE_DURATION_MINS")
 	if !ok {
@@ -38,11 +39,13 @@ func init() {
 	cachedMeasurements = make(map[string]Measurement)
 }
 
+// UpdateCache updates the cache for a client.
 func UpdateCache(clientID string, measurement *Measurement) {
 	delete(cachedMeasurements, clientID)
 	cachedMeasurements[clientID] = *measurement
 }
 
+// GetCachedMeasurement returns a cached measurement if valid.
 func GetCachedMeasurement(cliendID string) *Measurement {
 	measurement, ok := cachedMeasurements[cliendID]
 	if !ok {

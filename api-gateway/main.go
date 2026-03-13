@@ -14,6 +14,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+// main starts the HTTP->gRPC gateway.
 func main() {
 	// TODO: move config setup logic to dedicated conf package stored in the shared module
 	// initialize config
