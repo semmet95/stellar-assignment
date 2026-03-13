@@ -40,14 +40,14 @@ func init() {
 }
 
 // UpdateCache updates the cache for a client.
-func UpdateCache(clientID string, measurement *Measurement) {
-	delete(cachedMeasurements, clientID)
-	cachedMeasurements[clientID] = *measurement
+func UpdateCache(clientID, assetID string, measurement *Measurement) {
+	delete(cachedMeasurements, clientID+"_"+assetID)
+	cachedMeasurements[clientID+"_"+assetID] = *measurement
 }
 
 // GetCachedMeasurement returns a cached measurement if valid.
-func GetCachedMeasurement(cliendID string) *Measurement {
-	measurement, ok := cachedMeasurements[cliendID]
+func GetCachedMeasurement(clientID, assetID string) *Measurement {
+	measurement, ok := cachedMeasurements[clientID+"_"+assetID]
 	if !ok {
 		return nil
 	}

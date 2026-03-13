@@ -25,9 +25,11 @@ func NewAssetHandler(svc asset.AssetService) *AssetHandler {
 
 // GetAsset serves asset requests using cache then service.
 func (ah *AssetHandler) GetAsset(ctx context.Context, req *pb.GetAssetRequest) (*pb.AssetResponse, error) {
+	assetId := req.GetId()
+
 	// check cache before connecting to DB
 	clientId := ctx.Value("client_id").(string)
-	cachedMeasurement := cache.GetCachedMeasurement(clientId)
+	cachedMeasurement := cache.GetCachedMeasurement(clientId, assetId)
 	if cachedMeasurement != nil {
 		log.Printf("cache hit for client %s\n", clientId)
 		return &pb.AssetResponse{
@@ -36,7 +38,6 @@ func (ah *AssetHandler) GetAsset(ctx context.Context, req *pb.GetAssetRequest) (
 		}, nil
 	}
 
-	assetId := req.GetId()
 	log.Printf("getting measurements for asset with id %s\n", assetId)
 	asset, err := ah.assetSvc.GetAssetByID(ctx, assetId, shared.Measurement)
 	if err != nil {
@@ -44,7 +45,7 @@ func (ah *AssetHandler) GetAsset(ctx context.Context, req *pb.GetAssetRequest) (
 	}
 
 	// cache the response
-	cache.UpdateCache(clientId, &cache.Measurement{
+	cache.UpdateCache(clientId, assetId, &cache.Measurement{
 		ReqTime:     time.Now(),
 		ActivePower: asset.ActivePower,
 		Setpoint:    asset.Setpoint,
