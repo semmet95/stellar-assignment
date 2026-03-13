@@ -21,6 +21,7 @@ var (
 )
 
 // TODO: need to find a way to generate protobufs dynamically and share proto files
+// main starts the measurement gRPC server.
 func main() {
 
 	influxHost, ok := os.LookupEnv("INFLUX_HOST")
@@ -55,6 +56,7 @@ func main() {
 	}
 }
 
+// clientIDInterceptor forwards headers from incoming http request to grpc request metadata
 func clientIDInterceptor(
 	ctx context.Context,
 	req interface{},

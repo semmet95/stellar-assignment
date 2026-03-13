@@ -31,19 +31,36 @@ type assetRepository struct {
 }
 
 // TODO: create a generic interface for the DB client
-func NewAssetRepository(writer api.WriteAPI) AssetRepository {
+// NewAssetRepository creates a repository and logs writer errors.
+func NewAssetRepository(ctx context.Context, writer api.WriteAPI) AssetRepository {
 	// Q: not sure about the best practice here
-	go func() {
-		for err := range writer.Errors() {
-			log.Printf("influx writer error: %s\n", err.Error())
-		}
-	}()
+	go logWriterErr(ctx, writer)
 
 	return &assetRepository{
 		writer: writer,
 	}
 }
 
+func logWriterErr(ctx context.Context, writer api.WriteAPI) {
+	errCh := writer.Errors()
+	for {
+		select {
+		case <-ctx.Done():
+			log.Println("influx writer error listener stopped:", ctx.Err())
+			return
+		case err, ok := <-errCh:
+			if !ok {
+				log.Println("influx writer error channel closed")
+				return
+			}
+			if err != nil {
+				log.Printf("influx writer error: %v\n", err)
+			}
+		}
+	}
+}
+
+// PostAssetByID writes a measurement point.
 func (ar *assetRepository) PostAssetByID(ctx context.Context, asset *Asset, measurement string) error {
 	point := influxdb2.NewPointWithMeasurement(measurement).
 		AddTag("id", asset.ID).

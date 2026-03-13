@@ -16,6 +16,7 @@ func NewAssetService(assetRepo AssetRepository) AssetService {
 	}
 }
 
+// GetAssetByID returns latest asset measurement.
 func (as *assetService) GetAssetByID(ctx context.Context, assetId, measurement string) (*Asset, error) {
 	return as.assetRepo.GetAssetByID(ctx, assetId, measurement)
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	errcustom "api-gateway/pkg/error"
 	"context"
 	"fmt"
 	"log"
@@ -14,6 +15,8 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+// TODO: need to filter error here otherwise it is added to the response
+// main starts the HTTP->gRPC gateway.
 func main() {
 	// TODO: move config setup logic to dedicated conf package stored in the shared module
 	// initialize config
@@ -32,6 +35,7 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	mux := runtime.NewServeMux(
+		runtime.WithErrorHandler(errcustom.ErrorHandler),
 		runtime.WithIncomingHeaderMatcher(headerMatcher),
 	)
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}

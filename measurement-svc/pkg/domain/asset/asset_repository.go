@@ -33,6 +33,7 @@ func NewAssetRepository(queryAPI api.QueryAPI) AssetRepository {
 }
 
 // TODO: parameterize bucket name
+// GetAssetByID queries InfluxDB for an asset.
 func (ar *assetRepository) GetAssetByID(ctx context.Context, assetId, measurement string) (*Asset, error) {
 	query := fmt.Sprintf(`from(bucket: "poc")
     |> range(start: -1s)

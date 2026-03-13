@@ -24,7 +24,11 @@ var (
 	err      error
 )
 
+// main starts the integration service and listener.
 func main() {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
 	// TODO: move config setup logic to dedicated conf package stored in the shared module
 	// initialize config
 	modbusHost, ok := os.LookupEnv("MODBUS_HOST")
@@ -57,7 +61,7 @@ func main() {
 	dbClient = influxdb2.NewClient(fmt.Sprintf("http://%s:%s", influxHost, influxPort), "poc")
 	defer dbClient.Close()
 
-	assetRepo := asset.NewAssetRepository(dbClient.WriteAPI("poc", "poc"))
+	assetRepo := asset.NewAssetRepository(ctx, dbClient.WriteAPI("poc", "poc"))
 	assetSvc := asset.NewAssetService(assetRepo)
 
 	// start the listener
@@ -66,11 +70,12 @@ func main() {
 		mbClient,
 		1*time.Second,
 		assetSvc,
-	).StartListening(context.Background(), unitID); err != nil {
+	).StartListening(ctx, unitID); err != nil {
 		log.Fatalf("modbus listener failed to start with error: %v", err)
 	}
 }
 
+// initModbusClient creates and opens a Modbus client.
 func initModbusClient(host, port string) error {
 	mbClient, err = modbus.NewClient(&modbus.ClientConfiguration{
 		URL:     fmt.Sprintf("tcp://%s:%s", host, port),
