@@ -22,7 +22,6 @@ type AssetListener interface {
 	StartListening(ctx context.Context, unitID uint8) error
 }
 
-// NewAssetListener constructs a listener.
 func NewAssetListener(mbClient *modbus.ModbusClient, pollInterval time.Duration, assetSvc asset.AssetService) AssetListener {
 	return &assetListener{
 		modBusClient: mbClient,

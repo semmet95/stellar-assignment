@@ -26,7 +26,6 @@ type assetRepository struct {
 }
 
 // TODO: create a generic interface for the DB client
-// NewAssetRepository creates a repository with the given QueryAPI.
 func NewAssetRepository(queryAPI api.QueryAPI) AssetRepository {
 	return &assetRepository{
 		queryAPI: queryAPI,

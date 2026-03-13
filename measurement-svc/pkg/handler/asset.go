@@ -17,7 +17,6 @@ type AssetHandler struct {
 	assetSvc asset.AssetService
 }
 
-// NewAssetHandler creates a handler for AssetService.
 func NewAssetHandler(svc asset.AssetService) *AssetHandler {
 	return &AssetHandler{
 		assetSvc: svc,

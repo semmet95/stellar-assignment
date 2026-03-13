@@ -56,7 +56,7 @@ func main() {
 	}
 }
 
-// clientIDInterceptor extracts x-client-id into context.
+// clientIDInterceptor forwards headers from incoming http request to grpc request metadata
 func clientIDInterceptor(
 	ctx context.Context,
 	req interface{},

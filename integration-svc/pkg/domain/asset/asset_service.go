@@ -10,7 +10,6 @@ type assetService struct {
 	assetRepo AssetRepository
 }
 
-// NewAssetService creates an AssetService.
 func NewAssetService(assetRepo AssetRepository) AssetService {
 	return &assetService{
 		assetRepo: assetRepo,
